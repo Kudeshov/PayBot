@@ -1,0 +1,44 @@
+# Зависимости
+node_modules/
+npm-debug.log
+yarn-error.log
+yarn-debug.log
+.pnpm-debug.log
+
+# Окружение и секреты
+.env
+.env.local
+.env.*.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Логи и временные файлы
+*.log
+*.logs
+logs/
+*.pid
+*.seed
+*.pid.lock
+
+# Сборка и кэш
+dist/
+build/
+coverage/
+.nyc_output/
+
+# Редакторы и ОС
+.DS_Store
+Thumbs.db
+*.swp
+*~
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Прочие ненужные файлы
+*.bak
+*.tmp
+temp/
+tmp/
