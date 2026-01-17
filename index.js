@@ -11,18 +11,36 @@ const bot = new Telegraf(process.env.BOT_TOKEN);
 const GROUP_ID = process.env.GROUP_CHAT_ID;
 const YOOMONEY_WALLET = process.env.YOOMONEY_WALLET;
 const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET || '';
-
+const START_PHOTO = process.env.START_PHOTO || ''; // URL или file_id
+const START_TEXT = process.env.START_TEXT || (
+  '🚀 ЗАКРЫТЫЙ КАНАЛ ПО ИИ\n\n' +
+  '1 месяц — 9 900 рублей.\n\n' +
+  'Доступ предоставляется на 30 дней с момента оплаты.\n' +
+  'Для продления — оплатите повторно.\n\n' +
+  'Оплачивая, вы соглашаетесь с офертой и политикой обработки данных.\n\n' +
+  'Оплатить 👇'
+);
 // Временное хранилище заказов (userId → {orderId, amount, timestamp})
 const pendingOrders = new Map();
 
 // ===== БОТ ЛОГИКА =====
 bot.start(async (ctx) => {
-  await ctx.reply(
-    '👋 Добро пожаловать! Курс по ИИ за 9900₽.\n\n' +
-    '/buy — купить доступ в закрытую группу',
-    Markup.inlineKeyboard([
-      [Markup.button.callback('🛒 Купить курс', 'buy_course')]
-    ])
+  const keyboard = Markup.inlineKeyboard([
+    [Markup.button.callback('✅ Оплатить', 'buy_course')]
+  ]);
+
+  // Если фото не задано — просто текст + кнопка
+  if (!START_PHOTO) {
+    return ctx.reply(START_TEXT, keyboard);
+  }
+
+  // Фото + подпись + кнопка
+  return ctx.replyWithPhoto(
+    START_PHOTO,
+    {
+      caption: START_TEXT,
+      ...keyboard,
+    }
   );
 });
 
@@ -141,6 +159,16 @@ app.post('/yoomoney-webhook', (req, res) => {
 
   // Выдача доступа
   console.log(`✅ Успешная оплата ${label} → выдаём доступ пользователю ${foundUser}`);
+
+
+
+bot.on('photo', async (ctx) => {
+  const photos = ctx.message.photo;
+  const best = photos[photos.length - 1];
+  console.log('START_PHOTO file_id:', best.file_id);
+  await ctx.reply(`file_id получен: ${best.file_id}`);
+});
+
 
   bot.telegram
     .unbanChatMember(GROUP_ID, foundUser, { only_if_banned: true })
