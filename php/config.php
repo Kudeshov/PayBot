@@ -19,7 +19,7 @@ define('DB_USER', 'u213979');
 define('DB_PASS', 'MAN66X.erS.');
 
 // Базовый URL сайта
-define('BASE_URL', 'https://kudeshov.ru'); // без слэша на конце
+define('BASE_URL', 'https://www.kudeshov.ru'); // без слэша на конце
 
 // Папка бота
 define('BOT_PATH', '/bot'); // чтобы не дублировать пути
